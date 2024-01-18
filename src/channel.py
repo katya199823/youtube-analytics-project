@@ -26,9 +26,35 @@ class Channel:
         self.view_count = channel['items'][0]['statistics']['viewCount']
 
 
+    def __str__(self):
+        return f"{self.title}({self.url})"
+
+    def __add__(self, other):
+        return int(self.subscriber_count) + int(other.subscriber_count)
+
+    def __sub__(self, other):
+        return int(self.subscriber_count) - int(other.subscriber_count)
+
+    def __gt__(self, other):
+        return int(self.subscriber_count) > int(other.subscriber_count)
+
+    def __ge__(self, other):
+        return int(self.subscriber_count) >= int(other.subscriber_count)
+
+    def __lt__(self, other):
+        return int(self.subscriber_count) < int(other.subscriber_count)
+
+    def __le__(self, other):
+        return int(self.subscriber_count) <= int(other.subscriber_count)
+
+    def __eg__(self, other):
+        return int(self.subscriber_count) == int(other.subscriber_count)
+
+
     @property
     def channel_id(self):
         return self.__channel_id
+
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
@@ -41,8 +67,19 @@ class Channel:
         """
         Метод `to_json()`, сохраняющий в файл значения атрибутов экземпляра `Channel`
         """
+        self.new_data = {
+            'id': self.__channel_id,
+            'title': self.title,
+            'description': self.description,
+            'url': self.url,
+            'subscriber_count': self.subscriber_count,
+            'video_count': self.video_count,
+            'view_count': self.view_count,
+        }
+        json_data = json.dump(self.new_data, ensure_ascii=False)
+
         with open(file_name, 'w', encoding='utf-8') as file:
-            json.dump(self.__dict__, file, indent=4, ensure_ascii=False)
+            file.write(json_data)
 
 
     @classmethod
@@ -54,4 +91,6 @@ class Channel:
         youtube = build('youtube', 'v3', developerKey=api_key)
 
         return youtube
+
+
 
