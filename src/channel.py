@@ -47,7 +47,7 @@ class Channel:
     def __le__(self, other):
         return int(self.subscriber_count) <= int(other.subscriber_count)
 
-    def __eg__(self, other):
+    def __eq__(self, other):
         return int(self.subscriber_count) == int(other.subscriber_count)
 
 
