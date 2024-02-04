@@ -9,15 +9,20 @@ class Video:
 
     def __init__(self, video_id):
         self.__video_id = video_id
+        try:
+            self.video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
+                                                        id=self.__video_id
+                                                        ).execute()
 
-        self.video_response = youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails',
-                                                    id=self.__video_id
-                                                    ).execute()
-
-        self.video_title = self.video_response['items'][0]['snippet']['title']
-        self.video_url = f'https://www.youtube.com/watch?v={self.__video_id}'
-        self.video_view_count = self.video_response['items'][0]['statistics']['viewCount']
-        self.video_like_count = self.video_response['items'][0]['statistics']['likeCount']
+            self.video_title = self.video_response['items'][0]['snippet']['title']
+            self.video_url = f'https://www.youtube.com/watch?v={self.__video_id}'
+            self.video_view_count = self.video_response['items'][0]['statistics']['viewCount']
+            self.video_like_count = self.video_response['items'][0]['statistics']['likeCount']
+        except Exception:
+            self.title = None
+            self.url = None
+            self.view_count = None
+            self.like_count = None
 
     @property
     def video_id(self):
